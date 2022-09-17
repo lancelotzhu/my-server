@@ -10,8 +10,6 @@ COPY sources.list /etc/apt/sources.list
 #install server software baseline
 RUN apt update \
     && apt -y upgrade \
-    && apt -y install ssh \
-    && mkdir /run/sshd \
     && apt -y install tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && useradd -r -m -s /bin/bash admin \
@@ -25,11 +23,9 @@ RUN apt update \
 
 #configure supervisor
 ADD supervisord.conf /etc/supervisor/supervisord.conf
-ADD sshd.conf /etc/supervisor/conf.d
 
 #expose port
 EXPOSE 9001
-EXPOSE 22
 
 #startup supervisor
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
