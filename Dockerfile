@@ -22,7 +22,7 @@ RUN apt update \
     && apt-get clean
 
 #configure supervisor
-ADD supervisord.conf /etc/supervisor/supervisord.conf
+COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 #expose port
 EXPOSE 9001
