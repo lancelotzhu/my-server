@@ -2,24 +2,27 @@
 FROM ubuntu:22.04
 MAINTAINER lancelot_zhu@163.com
 
-#set environmental variables 
+#set environmental variables
+ENV TZ="Asia/Shanghai"
 
 #use local apt sources
 COPY sources.list /etc/apt/sources.list
 
 #install server software baseline
 RUN apt update \
-    && apt -y upgrade \
     && apt -y install tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && useradd -r -m -s /bin/bash admin \
-    && echo "admin:myserver123" | chpasswd \
+    && echo "admin:admin" | chpasswd \
     && apt -y install sudo \
     && echo "%admin ALL=(ALL) ALL" > /etc/sudoers.d/admin \
     && apt -y install nano \
-    && apt -y install openjdk-8-jdk-headless \
+    && apt -y install curl \
+    && apt -y install net-tools \
+    && apt -y install iputils-ping \
+    && apt -y install openjdk-8-jre-headless \
     && apt -y install supervisor \
-    && apt-get clean
+    && rm -rf /var/lib/apt/lists/*
 
 #configure supervisor
 COPY supervisord.conf /etc/supervisor/supervisord.conf
@@ -28,4 +31,4 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 EXPOSE 9001
 
 #startup supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

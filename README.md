@@ -1,20 +1,25 @@
 # my-server
 
-This base image contains the following softwares:
+### openjre8
+
+This base image contains the following software:
 - ubuntu 22.04 LTS
 - nano
-- openjdk8-headless
+- curl
+- ping
+- ifconfig
+- openjre8-headless
 - python3
 - supervisor
 
 #### create a base image
 ```sh
-docker build -t my-server-base:v1.0.0 .
+docker build -f Dockerfile_openjre8 -t lancelotzhu/openjre8:v1.0.0 .
 ```
 
 #### run a container
 ```sh
-docker run -d -it --name my-server -p 9001:9001 my-server-base:v1.0.0
+docker run -d -it --name my-server -p 9001:9001 lancelotzhu/openjre8:v1.0.0
 ```
 
 #### operate the newly created container
@@ -22,7 +27,7 @@ docker run -d -it --name my-server -p 9001:9001 my-server-base:v1.0.0
 ```sh
 docker exec -it my-server /bin/bash
 ```
-**Login as admin and manage the applications (recomended)**
+**Login as admin and manage the applications (recommended)**
 ```sh
 docker exec -it -u admin -w /home/admin my-server /bin/bash
 ```
