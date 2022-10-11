@@ -1,5 +1,5 @@
 #base image
-FROM ubuntu:22.04
+FROM openjdk:8-jdk-oraclelinux8
 MAINTAINER lancelot_zhu@163.com
 
 #set environmental variables
