@@ -6,7 +6,7 @@ MAINTAINER lancelot_zhu@163.com
 ENV TZ="Asia/Shanghai"
 
 #use local apt sources
-COPY sources.slim.list /etc/apt/sources.list
+COPY sources.list /etc/apt/sources.list
 
 #install server software baseline
 RUN apt update \

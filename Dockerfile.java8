@@ -1,28 +1,22 @@
 #base image
-FROM openjdk:8-jdk-oraclelinux8
+FROM oraclelinux:8
 MAINTAINER lancelot_zhu@163.com
 
 #set environmental variables
 ENV TZ="Asia/Shanghai"
 
-#use local apt sources
-COPY sources.list /etc/apt/sources.list
-
 #install server software baseline
-RUN apt update \
-    && apt -y install tzdata \
+RUN yum update \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && useradd -r -m -s /bin/bash admin \
     && echo "admin:admin" | chpasswd \
-    && apt -y install sudo \
+    && yum -y install sudo \
     && echo "%admin ALL=(ALL) ALL" > /etc/sudoers.d/admin \
-    && apt -y install nano \
-    && apt -y install curl \
-    && apt -y install net-tools \
-    && apt -y install iputils-ping \
-    && apt -y install openjdk-8-jre-headless \
-    && apt -y install supervisor \
-    && rm -rf /var/lib/apt/lists/*
+    && yum -y install nano \
+    && yum -y install net-tools \
+    && yum -y install java-1.8.0-openjdk-headless.x86_64 \
+    && yum -y install epel-release \
+    && yum -y install supervisor
 
 #configure supervisor
 COPY supervisord.conf /etc/supervisor/supervisord.conf
