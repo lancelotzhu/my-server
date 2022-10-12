@@ -1,12 +1,12 @@
 #base image
-FROM oraclelinux:8
+FROM rockylinux:8
 MAINTAINER lancelot_zhu@163.com
 
 #set environmental variables
 ENV TZ="Asia/Shanghai"
 
 #install server software baseline
-RUN yum update \
+RUN yum -y update \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && useradd -r -m -s /bin/bash admin \
     && echo "admin:admin" | chpasswd \
