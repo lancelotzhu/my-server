@@ -19,7 +19,7 @@ docker build -f Dockerfile.java8 -t lancelotzhu/java8:v1.0.0 .
 
 #### run a container
 ```sh
-docker run -d -it --name my-server -p 9001:9001 lancelotzhu/openjre8:v1.0.0
+chdocker run -d -it --name my-server -p 9001:9001 lancelotzhu/java8:v1.0.0
 ```
 
 #### operate the newly created container
@@ -46,12 +46,12 @@ This base image contains the following software:
 
 #### create a base image
 ```sh
-docker build -f Dockerfile.java8.slim -t lancelotzhu/java8-slim:v1.0.0 .
+docker build -f Dockerfile.java8.slim -t lancelotzhu/java8:v1.0.0-slim .
 ```
 
 #### run a container
 ```sh
-docker run -d -it --name my-server -p 9001:9001 lancelotzhu/openjre8:v1.0.0
+docker run -d -it --name my-server -p 9001:9001 lancelotzhu/java8:v1.0.0-slim
 ```
 
 #### operate the newly created container
