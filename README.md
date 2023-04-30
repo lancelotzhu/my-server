@@ -81,7 +81,7 @@ This base image contains the following software:
 #### create a base image
 ```sh
 docker build -f Dockerfile.java17.slim -t lancelotzhu/java17:1.0.1-slim .
-docker buildx build -f Dockerfile.java17.slim -t lancelotzhu/java17:1.0.1-slim --platform=linux/arm/v7,linux/arm64/v8,linux/amd64 . --push
+docker buildx build -f Dockerfile.java17.slim -t lancelotzhu/java17:1.0.1-slim --platform=linux/arm/v7,linux/arm64,linux/amd64 . --push
 ```
 
 #### run a container
