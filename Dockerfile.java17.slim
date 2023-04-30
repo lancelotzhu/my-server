@@ -1,15 +1,13 @@
 #base image
-FROM openjdk:17-ea-slim-buster
+FROM ubuntu:22.04
 MAINTAINER lancelot_zhu@163.com
 
 #set environmental variables
 ENV TZ="Asia/Shanghai"
 
-#use local apt sources
-COPY sources.list /etc/apt/sources.list
-
 #install server software baseline
 RUN apt update \
+    && apt -y upgrade \
     && apt -y install tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && useradd -r -m -s /bin/bash admin \
@@ -20,6 +18,7 @@ RUN apt update \
     && apt -y install curl \
     && apt -y install net-tools \
     && apt -y install iputils-ping \
+    && apt -y install openjdk-17-jdk-headless \
     && apt -y install supervisor \
     && rm -rf /var/lib/apt/lists/*
 
