@@ -10,22 +10,18 @@ RUN sed -i "s@http://\(deb\|security\).debian.org@http://mirrors.aliyun.com@g" /
 
 #install server software baseline
 RUN apt update \
+    && apt -y upgrade \
     && apt -y install tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && useradd -r -m -s /bin/bash admin \
-    && echo "admin:admin" | chpasswd \
-    && apt -y install sudo \
-    && echo "%admin ALL=(ALL) ALL" > /etc/sudoers.d/admin \
     && apt -y install curl \
     && apt -y install procps \
-    && apt -y install supervisor \
+    && apt -y install dumb-init \
     && rm -rf /var/lib/apt/lists/*
 
-#configure supervisor
-COPY supervisord.conf /etc/supervisor/supervisord.conf
+#set work dir and user
+WORKDIR /home/admin
+USER admin
 
-#expose port
-EXPOSE 9001
-
-#startup supervisor
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+#startup java program
+ENTRYPOINT ["dumb-init", ""java", "-version"]
