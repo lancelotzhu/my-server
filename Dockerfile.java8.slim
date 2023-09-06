@@ -1,12 +1,12 @@
 #base image
-FROM openjdk:8-jre-slim-buster
+FROM openjdk:8-jre-bullseye
 MAINTAINER lancelot_zhu@163.com
 
 #set environmental variables
 ENV TZ="Asia/Shanghai"
 
-#use local apt sources
-COPY sources.list /etc/apt/sources.list
+# change apt source
+RUN sed -i "s@http://\(deb\|security\).debian.org@http://mirrors.aliyun.com@g" /etc/apt/sources.list
 
 #install server software baseline
 RUN apt update \
@@ -16,10 +16,8 @@ RUN apt update \
     && echo "admin:admin" | chpasswd \
     && apt -y install sudo \
     && echo "%admin ALL=(ALL) ALL" > /etc/sudoers.d/admin \
-    && apt -y install nano \
     && apt -y install curl \
-    && apt -y install net-tools \
-    && apt -y install iputils-ping \
+    && apt -y install procps \
     && apt -y install supervisor \
     && rm -rf /var/lib/apt/lists/*
 

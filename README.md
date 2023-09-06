@@ -15,7 +15,7 @@ This base image contains the following software:
 #### create a base image
 ```sh
 docker build -f Dockerfile.java8 -t lancelotzhu/java8:1.0.0 .
-docker buildx build -f Dockerfile.java8 -t lancelotzhu/java8:1.0.0 --platform=linux/arm64,linux/amd64 . --push
+docker buildx build -f Dockerfile.java8 -t lancelotzhu/java8:1.0.0 --platform=linux/arm64/v8,linux/amd64 . --push
 ```
 
 #### run a container
@@ -47,13 +47,13 @@ This base image contains the following software:
 
 #### create a base image
 ```sh
-docker build -f Dockerfile.java8.slim -t lancelotzhu/java8:1.0.0-slim .
-docker buildx build -f Dockerfile.java8.slim -t lancelotzhu/java8:1.0.0-slim --platform=linux/arm64,linux/amd64 . --push
+docker build -f Dockerfile.java8.slim -t lancelotzhu/java8:1.0.1-slim .
+docker buildx build -f Dockerfile.java8.slim -t lancelotzhu/java8:1.0.1-slim --platform=linux/arm64/v8,linux/amd64 . --push
 ```
 
 #### run a container
 ```sh
-docker run -d -it --name my-server -p 9001:9001 lancelotzhu/java8:1.0.0-slim
+docker run -d -it --name my-server -p 9001:9001 lancelotzhu/java8:1.0.1-slim
 ```
 
 #### operate the newly created container
