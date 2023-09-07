@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
+<configuration scan="true">
 	<!--定义日志文件的存储地址 -->
 	<springProperty scope="context" name="LOG_HOME" source="logging.path"/>
 	<!--定义日志文件的输出级别 -->
@@ -61,10 +61,18 @@
 	</logger>
 
 	<!-- springboot log configure -->
-	<logger name="org.springframework" level="INFO" />
+	<logger name="org.springframework" level="INFO">
+		<appender-ref ref="STDOUT-APPENDER" />
+		<appender-ref ref="DEFAULT-APPENDER" />
+		<appender-ref ref="ERROR-APPENDER" />
+	</logger>
 
 	<!-- logback log configure -->
-	<logger name="ch.qos.logback" level="INFO" />
+	<logger name="ch.qos.logback" level="INFO">
+		<appender-ref ref="STDOUT-APPENDER" />
+		<appender-ref ref="DEFAULT-APPENDER" />
+		<appender-ref ref="ERROR-APPENDER" />
+	</logger>
 
 	<!-- 日志输出级别 -->
 	<root level="${LOG_LEVEL}">

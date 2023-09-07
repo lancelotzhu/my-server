@@ -4,11 +4,11 @@ MAINTAINER lancelot_zhu@163.com
 
 #set environmental variables
 ENV APP_NAME=app
-ENV APP_OPTS="--spring.profiles.active=prod"
 ARG APP_PORT=8000
 ENV APP_PORT=${APP_PORT}
 ARG LOG_DIR=/home/admin/logs
 ENV LOG_DIR=${LOG_DIR}
+ENV APP_OPTS="--spring.profiles.active=prod --server.port=${APP_PORT} --spring.application.name=${APP_NAME} --logging.path=${LOG_DIR}"
 ENV JAVA_OPTS="-XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+CMSClassUnloadingEnabled -XX:SurvivorRatio=8 -XX:-UseParNewGC -Xms1g -Xmx1g -Xmn512m -Xloggc:${LOG_DIR}/gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
 
 #change apt source
