@@ -37,23 +37,20 @@ docker exec -it -u admin -w /home/admin my-server /bin/bash
 
 This base image contains the following software:
 - debian bullseye
-- nano
 - curl
-- ping
-- ifconfig
-- openjre8-headless
-- python3
-- supervisor
+- ps
+- openjre8
 
 #### create a base image
 ```sh
-docker build -f Dockerfile.java8.slim -t lancelotzhu/java8:1.0.1-slim .
-docker buildx build -f Dockerfile.java8.slim -t lancelotzhu/java8:1.0.1-slim --platform=linux/arm64/v8,linux/amd64 . --push
+docker build -f docker/Dockerfile.java8.slim  -t lancelotzhu/java8:1.0.2-slim --build-arg APP_PORT=8888 --build-arg LOG_DIR=/home/admin/logs/sample-app .
+docker buildx build -f docker/Dockerfile.java8.slim -t lancelotzhu/java8:1.0.2-slim --platform=linux/arm64/v8,linux/amd64 . --push
 ```
 
 #### run a container
 ```sh
-docker run -d -it --name my-server -p 9001:9001 lancelotzhu/java8:1.0.1-slim
+mvn clean install -Dmaven.test.skip=true
+docker run -itd --name my-server -e APP_NAME=sample-app -e APP_OPTS="--spring.profiles.active=dev" -p 8888:8888 -v target:/home/admin/app lancelotzhu/java8:1.0.2-slim
 ```
 
 #### operate the newly created container

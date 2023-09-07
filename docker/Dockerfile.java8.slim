@@ -1,0 +1,43 @@
+#base image
+FROM openjdk:8-jre-slim-bullseye
+MAINTAINER lancelot_zhu@163.com
+
+#set environmental variables
+ENV APP_NAME=app
+ENV APP_OPTS="--spring.profiles.active=prod"
+ARG APP_PORT=8000
+ENV APP_PORT=${APP_PORT}
+ARG LOG_DIR=/home/admin/logs
+ENV LOG_DIR=${LOG_DIR}
+ENV JAVA_OPTS="-XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+CMSClassUnloadingEnabled -XX:SurvivorRatio=8 -XX:-UseParNewGC -Xms1g -Xmx1g -Xmn512m -Xloggc:${LOG_DIR}/gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
+
+#change apt source
+RUN sed -i "s@http://\(deb\|security\).debian.org@http://mirrors.aliyun.com@g" /etc/apt/sources.list
+
+#change local timezone
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+#install server software baseline
+RUN apt update \
+    && apt -y upgrade \
+    && useradd -r -m -s /bin/bash admin \
+    && apt -y install curl \
+    && apt -y install procps \
+    && apt -y install dumb-init \
+    && rm -rf /var/lib/apt/lists/*
+
+#copy startup script
+RUN mkdir -p /home/admin
+RUN mkdir -p ${LOG_DIR}
+COPY docker/bootstrap.sh /home/admin
+RUN chmod u+x /home/admin/bootstrap.sh
+RUN chown admin.admin -R /home/admin
+RUN chown admin.admin -R ${LOG_DIR}
+
+#set work dir and user
+WORKDIR /home/admin
+USER admin
+EXPOSE ${APP_PORT}
+
+#startup java program
+ENTRYPOINT ["dumb-init", "sh", "-c", "/home/admin/bootstrap.sh"]
