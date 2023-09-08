@@ -9,7 +9,7 @@ ENV APP_PORT=${APP_PORT}
 ARG LOG_DIR=/home/admin/logs
 ENV LOG_DIR=${LOG_DIR}
 ENV APP_OPTS="--spring.profiles.active=prod --server.port=${APP_PORT} --spring.application.name=${APP_NAME} --logging.path=${LOG_DIR}"
-ENV JAVA_OPTS="-XX:SoftRefLRUPolicyMSPerMB=0 -XX:SurvivorRatio=8 -Xmx1g -Xmn512m -Xlog:gc:${LOG_DIR}/gc.log -verbose:gc -Xlog:gc*"
+ENV JAVA_OPTS="-Xmx1g -Xmn375m -XX:SurvivorRatio=8 -Xlog:gc:${LOG_DIR}/gc.log -verbose:gc -Xlog:gc*"
 
 #change apt source
 RUN sed -i "s@http://\(deb\|security\).debian.org@http://mirrors.aliyun.com@g" /etc/apt/sources.list
