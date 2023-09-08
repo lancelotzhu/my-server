@@ -59,27 +59,50 @@ docker run -itd --name my-server -e APP_NAME=app -e APP_OPTS="--spring.profiles.
 docker exec -it -u admin -w /home/admin my-server /bin/bash
 ```
 
-### java17-slim
+### java11-slim
 
 This base image contains the following software:
-- ubuntu 22.04 LTS
-- nano
+- debian bullseye
 - curl
-- ping
-- ifconfig
-- openjdk-17-jdk-headless
-- python3
-- supervisor
+- ps
+- openjre11
 
 #### create a base image
 ```sh
-docker build -f Dockerfile.java17.slim -t lancelotzhu/java17:1.0.1-slim .
-docker buildx build -f Dockerfile.java17.slim -t lancelotzhu/java17:1.0.1-slim --platform=linux/arm/v7,linux/arm64,linux/amd64 . --push
+docker build -f docker/Dockerfile.java11.slim  -t lancelotzhu/java11:1.0.2-slim --build-arg APP_PORT=8000 --build-arg LOG_DIR=/home/admin/logs .
+docker buildx build -f docker/Dockerfile.java11.slim -t lancelotzhu/java11:1.0.2-slim --platform=linux/arm64/v8,linux/amd64 --build-arg APP_PORT=8000 --build-arg LOG_DIR=/home/admin/logs . --push
 ```
 
 #### run a container
 ```sh
-docker run -d -it --name my-server -p 9001:9001 lancelotzhu/java17:1.0.1-slim
+mvn clean install -Dmaven.test.skip=true
+docker run -itd --name my-server -e APP_NAME=sample-app -e APP_OPTS="--spring.profiles.active=prod" -p 8000:8000 -v target:/home/admin/app lancelotzhu/java11:1.0.2-slim
+```
+
+#### operate the newly created container
+**Login as admin and manage the applications (recommended)**
+```sh
+docker exec -it -u admin -w /home/admin my-server /bin/bash
+```
+
+### java17-slim
+
+This base image contains the following software:
+- debian bullseye
+- curl
+- ps
+- openjre17
+
+#### create a base image
+```sh
+docker build -f docker/Dockerfile.java17.slim  -t lancelotzhu/java17:1.0.2-slim --build-arg APP_PORT=8000 --build-arg LOG_DIR=/home/admin/logs .
+docker buildx build -f docker/Dockerfile.java17.slim -t lancelotzhu/java17:1.0.2-slim --platform=linux/arm64/v8,linux/amd64 --build-arg APP_PORT=8000 --build-arg LOG_DIR=/home/admin/logs . --push
+```
+
+#### run a container
+```sh
+mvn clean install -Dmaven.test.skip=true
+docker run -itd --name my-server -e APP_NAME=sample-app -e APP_OPTS="--spring.profiles.active=prod" -p 8000:8000 -v target:/home/admin/app lancelotzhu/java17:1.0.2-slim
 ```
 
 #### operate the newly created container
