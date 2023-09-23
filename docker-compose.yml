@@ -1,0 +1,80 @@
+version: "3.9"
+services:
+  my-server-openjdk8-hotspot:
+    image: lancelotzhu/openjdk8-hotspot:1.0.0-slim
+    hostname: my-server-openjdk8-hotspot
+    container_name: my-server-openjdk8-hotspot
+    restart: always
+    volumes:
+      - "./target/sample-app.jar:/home/admin/app/sample-app.jar"
+    environment:
+      - "APP_NAME=sample-app"
+      - "APP_OPTS=--spring.profiles.active=prod"
+      - "JAVA_OPTS="
+    ports:
+      - "8001:8000"
+  my-server-openjdk8-openj9:
+    image: lancelotzhu/openjdk8-openj9:1.0.0-slim
+    hostname: my-server-openjdk8-openj9
+    container_name: my-server-openjdk8-openj9
+    restart: always
+    volumes:
+      - "./target/sample-app.jar:/home/admin/app/sample-app.jar"
+    environment:
+      - "APP_NAME=sample-app"
+      - "APP_OPTS=--spring.profiles.active=prod"
+      - "JAVA_OPTS="
+    ports:
+      - "8002:8000"
+  my-server-openjdk11-hotspot:
+    image: lancelotzhu/openjdk11-hotspot:1.0.0-slim
+    hostname: my-server-openjdk11-hotspot
+    container_name: my-server-openjdk11-hotspot
+    restart: always
+    volumes:
+      - "./target/sample-app.jar:/home/admin/app/sample-app.jar"
+    environment:
+      - "APP_NAME=sample-app"
+      - "APP_OPTS=--spring.profiles.active=prod"
+      - "JAVA_OPTS="
+    ports:
+      - "8003:8000"
+  my-server-openjdk11-openj9:
+    image: lancelotzhu/openjdk11-openj9:1.0.0-slim
+    hostname: my-server-openjdk11-openj9
+    container_name: my-server-openjdk11-openj9
+    restart: always
+    volumes:
+      - "./target/sample-app.jar:/home/admin/app/sample-app.jar"
+    environment:
+      - "APP_NAME=sample-app"
+      - "APP_OPTS=--spring.profiles.active=prod"
+      - "JAVA_OPTS="
+    ports:
+      - "8004:8000"
+  my-server-openjdk17-hotspot:
+    image: lancelotzhu/openjdk17-hotspot:1.0.0-slim
+    hostname: my-server-openjdk17-hotspot
+    container_name: my-server-openjdk17-hotspot
+    restart: always
+    volumes:
+      - "./target/sample-app.jar:/home/admin/app/sample-app.jar"
+    environment:
+      - "APP_NAME=sample-app"
+      - "APP_OPTS=--spring.profiles.active=prod"
+      - "JAVA_OPTS="
+    ports:
+      - "8005:8000"
+  my-server-openjdk17-openj9:
+    image: lancelotzhu/openjdk17-openj9:1.0.0-slim
+    hostname: my-server-openjdk17-openj9
+    container_name: my-server-openjdk17-openj9
+    restart: always
+    volumes:
+      - "./target/sample-app.jar:/home/admin/app/sample-app.jar"
+    environment:
+      - "APP_NAME=sample-app"
+      - "APP_OPTS=--spring.profiles.active=prod"
+      - "JAVA_OPTS="
+    ports:
+      - "8006:8000"
