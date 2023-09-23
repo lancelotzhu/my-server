@@ -1,0 +1,43 @@
+#base image
+FROM openjdk:8-jdk-slim-bullseye
+MAINTAINER lancelot_zhu@163.com
+
+#set environmental variables
+ENV APP_NAME=app
+ARG APP_PORT=8000
+ENV APP_PORT=${APP_PORT}
+ARG LOG_DIR=/home/admin/logs
+ENV LOG_DIR=${LOG_DIR}
+ENV APP_OPTS="--spring.profiles.active=prod --server.port=${APP_PORT} --spring.application.name=${APP_NAME} --logging.path=${LOG_DIR}"
+ENV JAVA_OPTS="-Xms1g -Xmx1g -Xmn375m -Xss256k -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=15 -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=0 -XX:+CMSClassUnloadingEnabled -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses -Xloggc:${LOG_DIR}/gc-%t.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintReferenceGC -XX:+PrintGCApplicationStoppedTime -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${LOG_DIR}"
+
+#change apt source
+RUN sed -i "s@http://\(deb\|security\).debian.org@http://mirrors.aliyun.com@g" /etc/apt/sources.list
+
+#change local timezone
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+#install server software baseline
+RUN apt update \
+    && apt -y upgrade \
+    && useradd -r -m -s /bin/bash admin \
+    && apt -y install curl \
+    && apt -y install procps \
+    && apt -y install dumb-init \
+    && rm -rf /var/lib/apt/lists/*
+
+#copy startup script
+RUN mkdir -p /home/admin
+RUN mkdir -p ${LOG_DIR}
+COPY docker/bootstrap.sh /home/admin
+RUN chmod u+x /home/admin/bootstrap.sh
+RUN chown admin.admin -R /home/admin
+RUN chown admin.admin -R ${LOG_DIR}
+
+#set work dir and user
+WORKDIR /home/admin
+USER admin
+EXPOSE ${APP_PORT}
+
+#startup java program
+ENTRYPOINT ["dumb-init", "sh", "-c", "/home/admin/bootstrap.sh"]
